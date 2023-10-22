@@ -52,7 +52,7 @@ public class PersonCard extends UiPart<Region> {
     private Label salary;
     @FXML
     private FlowPane tags;
-    private static Role role = new Role("HR");
+    private static Role role = new Role("Developer");
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
