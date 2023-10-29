@@ -4,13 +4,24 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.logic.Messages;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.client.Document;
+import seedu.address.model.commons.Date;
+import seedu.address.model.commons.Name;
+import seedu.address.model.developer.GithubId;
+import seedu.address.model.developer.Rating;
+import seedu.address.model.person.Role;
+import seedu.address.model.developer.Salary;
 import seedu.address.model.person.*;
-import seedu.address.model.tag.Project;
+import seedu.address.model.project.Deadline;
+import seedu.address.model.project.Description;
+import seedu.address.model.project.Project;
 
 /**
  * Contains utility methods used for parsing strings in the various *Parser classes.
@@ -30,21 +41,6 @@ public class ParserUtil {
             throw new ParseException(MESSAGE_INVALID_INDEX);
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
-    }
-
-
-    /**
-     * Returns true if the String can be parsed to return an Index and false if not.
-     *
-     * @param str The String to try to parse.
-     */
-    public static Boolean canParseIndex(String str) {
-        try {
-            parseIndex(str);
-        } catch (ParseException e) {
-            return false;
-        }
-        return true;
     }
     
     /**
@@ -116,10 +112,10 @@ public class ParserUtil {
     public static Project parseProject(String project) throws ParseException {
         requireNonNull(project);
         String trimmedProject = project.trim();
-        if (!Project.isValidProjectName(trimmedProject)) {
-            throw new ParseException(Project.MESSAGE_CONSTRAINTS);
+        if (!Name.isValidName(trimmedProject)) {
+            throw new ParseException(Name.MESSAGE_CONSTRAINTS);
         }
-        return new Project(trimmedProject);
+        return new Project(new Name(trimmedProject),new Description(""),new HashSet<Deadline>());
     }
 
     /**
@@ -134,47 +130,62 @@ public class ParserUtil {
         return projectSet;
     }
     /**
+     * Parses {@code Collection<String> projects} and checks whether each String is the name of an existing project.
+     * 
+     * @param projects The Collection of projects to check.
+     * @returns A HashSet of Strings if check is successful.
+     * @throws ParseException if one of the Strings in projects is not the name of an existing project.
+     */
+    public static Set<String> parseProjectsWithCheck(Collection<String> projects) throws ParseException {
+        requireNonNull(projects);
+        final Set<String> projectSet = new HashSet<>();
+        
+        for (String p : projects) {
+            if (!Project.isValidProject(p)) {
+                throw new ParseException(String.format(Messages.MESSAGE_NONEXISTENT_PROJECT, p));
+            } else {
+                projectSet.add(p);
+            }
+        }
+        return projectSet;
+    }
+
+    /**
+     * Parses {@code Collection<String> deadlines} into a {@code Set<Deadline>}.
+     *
+     * @param deadlines The Collection of deadlines to parse.
+     * @returns A HashSet of Deadlines if parsing is successful.
+     * @throws ParseException if format is invalid.
+     */
+    public static Set<Deadline> parseDeadlines(Collection<String> deadlines) throws ParseException {
+        requireNonNull(deadlines);
+        final Set<Deadline> deadlineSet = new HashSet<>();
+        for (String str : deadlines) {
+            if (!Deadline.isValidDeadline(str)) {
+                throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, Deadline.MESSAGE_CONSTRAINTS));
+            } else {
+                deadlineSet.add(new Deadline(str));
+            }
+        }
+        return deadlineSet;
+    }
+    
+    /**
      * Parses a {@code String dateJoined} into a {@code DateJoined}.
      * Leading and trailing whitespaces will be trimmed.
      *
      * @throws ParseException if the given {@code DateJoined} is invalid.
      */
-    public static DateJoined parseDateJoined(String dateJoined) throws ParseException {
+    public static Date parseDateJoined(String dateJoined) throws ParseException {
         requireNonNull(dateJoined);
         String trimmedDateJoined = dateJoined.trim();
-        if (!DateJoined.isValidDate(trimmedDateJoined)) {
-            throw new ParseException(DateJoined.MESSAGE_CONSTRAINTS);
+        if (!Date.isValidDate(trimmedDateJoined)) {
+            throw new ParseException(Date.MESSAGE_CONSTRAINTS);
         }
-        return new DateJoined(trimmedDateJoined);
+        return new Date(trimmedDateJoined);
     }
-    /**
-     * Parses a {@code String username} into a {@code Username}.
-     * Leading and trailing whitespaces will be trimmed.
-     *
-     * @throws ParseException if the given {@code Username} is invalid.
-     */
-    public static Username parseUsername(String username) throws ParseException {
-        requireNonNull(username);
-        String trimmedUsername = username.trim();
-        if (!Username.isValidUsername(trimmedUsername)) {
-            throw new ParseException(Username.MESSAGE_CONSTRAINTS);
-        }
-        return new Username(trimmedUsername);
-    }
-    /**
-     * Parses a {@code String password} into a {@code Password}.
-     * Leading and trailing whitespaces will be trimmed.
-     *
-     * @throws ParseException if the given {@code Password} is invalid.
-     */
-    public static Password parsePassword(String password) throws ParseException {
-        requireNonNull(password);
-        String trimmedPassword = password.trim();
-        if (!Password.isValidPassword(trimmedPassword)) {
-            throw new ParseException(Password.MESSAGE_CONSTRAINTS);
-        }
-        return new Password(trimmedPassword);
-    }
+
+
     /**
      * Parses a {@code String role} into a {@code Role}.
      * Leading and trailing whitespaces will be trimmed.
@@ -203,4 +214,41 @@ public class ParserUtil {
         }
         return new Salary(trimmedSalary);
     }
+
+    public static GithubId parseGithubId(String githubid) throws ParseException {
+        requireNonNull(githubid);
+        String trimmedGithubId = githubid.trim();
+        if (!GithubId.isValidGithubId(trimmedGithubId)) {
+            throw new ParseException(GithubId.MESSAGE_CONSTRAINTS);
+        }
+        return new GithubId(trimmedGithubId);
+    }
+
+    public static Rating parseRating(String rating) throws ParseException {
+        requireNonNull(rating);
+        String trimmedRating = rating.trim();
+        if (!Rating.isValidRating(trimmedRating)) {
+            throw new ParseException(Salary.MESSAGE_CONSTRAINTS);
+        }
+        return new Rating(trimmedRating);
+    }
+
+    public static Document parseDocument(String doc) throws ParseException {
+        requireNonNull(doc);
+        String trimmedDoc = doc.trim();
+        if (!Document.isValidUrl(trimmedDoc)) {
+            throw new ParseException(Document.MESSAGE_CONSTRAINTS);
+        }
+        return new Document(trimmedDoc);
+    }
+
+    public static Description parseDescription(String description) throws ParseException {
+        requireNonNull(description);
+        String trimmedDescription = description.trim();
+        if (!Description.isValidDescription(trimmedDescription)) {
+            throw new ParseException(Description.MESSAGE_CONSTRAINTS);
+        }
+        return new Description(trimmedDescription);
+    }
+
 }

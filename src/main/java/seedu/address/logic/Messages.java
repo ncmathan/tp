@@ -5,7 +5,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import seedu.address.logic.parser.Prefix;
-import seedu.address.model.person.Person;
+import seedu.address.model.client.Client;
+import seedu.address.model.developer.Developer;
 
 /**
  * Container for user visible messages.
@@ -15,15 +16,21 @@ public class Messages {
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
     public static final String MESSAGE_INVALID_FILE = "File does not exist!\n";
-    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid";
-    public static final String MESSAGE_PERSONS_LISTED_OVERVIEW =
-                "These are the %1$d employees with matching information";
+    public static final String MESSAGE_INVALID_DEVELOPER_DISPLAYED_INDEX = "The developer index provided is invalid!";
+    public static final String MESSAGE_INVALID_CLIENT_DISPLAYED_INDEX = "The client index provided is invalid!";
+    public static final String MESSAGE_INVALID_PROJECT_DISPLAYED_INDEX = "The project index provided is invalid!";
+    public static final String MESSAGE_INAPPLICABLE_PREFIX_USED = "You tried to edit an inapplicable field! Please check " +
+            "the prefixes used and try again. \n%1$s";
+    public static final String MESSAGE_NONEXISTENT_PROJECT = "There is no existing Project with the name: %1$s!";
+    public static final String MESSAGE_DEVELOPERS_LISTED_OVERVIEW =
+                "These are the %1$d developers with matching information.";
+    public static final String MESSAGE_CLIENTS_LISTED_OVERVIEW =
+            "These are the %1$d clients with matching information.";
+    public static final String MESSAGE_PROJECTS_LISTED_OVERVIEW =
+            "These are the %1$d projects with matching information.";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
-    public static final String MESSAGE_UNAUTHORISED_COMMAND = 
-                "You do not have the access rights to execute this command!";
-    public static final String MESSAGE_INVALID_ACTION_BY_USER = "You are access right to do this!";
-  
+
     /**
      * Returns an error message indicating the duplicate prefixes.
      */
@@ -37,30 +44,55 @@ public class Messages {
     }
 
     /**
-     * Formats the {@code person} for display to the user.
+     * Formats the {@code developer} for display to the user.
      */
-    public static String format(Person person) {
+    public static String format(Developer developer) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(person.getName())
+        builder.append(developer.getName())
                 .append("; Phone: ")
-                .append(person.getPhone())
+                .append(developer.getPhone())
                 .append("; Email: ")
-                .append(person.getEmail())
+                .append(developer.getEmail())
                 .append("; Address: ")
-                .append(person.getAddress())
+                .append(developer.getAddress())
                 .append("; Date Joined: ")
-                .append(person.getDateJoined())
+                .append(developer.getDateJoined())
                 .append("; Role: ")
-                .append(person.getRole())
+                .append(developer.getRole())
                 .append("; Salary: ")
-                .append(person.getSalary())
-                .append("; Username: ")
-                .append(person.getUsername())
-                .append("; Password: ")
-                .append(person.getPassword())
+                .append(developer.getSalary())
                 .append("; Projects: ");
-        person.getProjects().forEach(builder::append);
+        developer.getProjects().forEach(builder::append);
         return builder.toString();
     }
 
+    public static String format(Client client) {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(client.getName())
+                .append("; Phone: ")
+                .append(client.getPhone())
+                .append("; Email: ")
+                .append(client.getEmail())
+                .append("; Address: ")
+                .append(client.getAddress())
+                .append("; Organisation: ")
+                .append(client.getOrganisation())
+                .append("; Role: ")
+                .append(client.getRole())
+                .append("; Document: ")
+                .append(client.getDocument())
+                .append("; Projects: ");
+        client.getProjects().forEach(builder::append);
+        return builder.toString();
+    }
+
+    public static Object format(seedu.address.model.project.Project project) {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(project.getName())
+                .append(";\nDescription: ")
+                .append(project.getProjectDescription())
+                .append(";\nDeadlines:\n");
+        project.getProjectDeadlines().forEach(builder::append);
+        return builder.toString();
+    }
 }

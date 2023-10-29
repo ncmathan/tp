@@ -2,12 +2,10 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.tag.Project;
+import seedu.address.model.commons.Name;
 
 /**
  * Represents a Person in the address book.
@@ -20,31 +18,22 @@ public class Person {
     private final Phone phone;
     private final Email email;
 
-    private final Username username;
-    private final Password password;
     private final Role role;
-    private final Salary salary;
 
     // Data fields
     private final Address address;
-    private final DateJoined dateJoined;
-    private final Set<Project> projects = new HashSet<>();
+    private final Set<String> projects = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address,DateJoined dateJoined, Username username,
-                  Password password, Role role, Salary salary, Set<Project> projects){
-        requireAllNonNull(name, phone, email, address, username, password, role, salary, projects);
+    public Person(Name name, Phone phone, Email email, Address address, Role role, Set<String> projects) {
+        requireAllNonNull(name, phone, email, address, role, projects);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.dateJoined = dateJoined;
-        this.username = username;
-        this.password = password;
         this.role = role;
-        this.salary = salary;
         this.projects.addAll(projects);
     }
 
@@ -64,28 +53,17 @@ public class Person {
         return address;
     }
 
-    public Username getUsername() {
-        return username;
-    }
-    public Password getPassword(){
-        return password;
-    }
-    public Salary getSalary(){
-        return salary;
-    }
     public Role getRole(){
         return role;
     }
 
-    public DateJoined getDateJoined(){
-        return dateJoined;
-    }
+
 
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
-    public Set<Project> getProjects() {
+    public Set<String> getProjects() {
         return Collections.unmodifiableSet(projects);
     }
 
@@ -122,10 +100,6 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
-                && dateJoined.equals(otherPerson.dateJoined)
-                && username.equals(otherPerson.username)
-                && password.equals(otherPerson.password)
-                && salary.equals(otherPerson.salary)
                 && role.equals(otherPerson.role)
                 && projects.equals(otherPerson.projects);
     }
@@ -133,7 +107,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, username, password, salary, role, projects);
+        return Objects.hash(name, phone, email, address, role, projects);
     }
 
     @Override
@@ -143,10 +117,7 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
-                .add("username", username)
-                .add("password", password)
                 .add("role", role)
-                .add("salary", salary)
                 .add("projects", projects)
                 .toString();
     }

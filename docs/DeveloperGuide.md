@@ -102,7 +102,7 @@ How the `Logic` component works:
 
 1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
 1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).
+1. The command can communicate with the `Model` when it is executed (e.g. to delete a developer).
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
@@ -121,8 +121,8 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* stores the address book data i.e., all `Developer` objects (which are contained in a `UniqueDeveloperList` object), and similarly so for `Client` and `Project` objects.
+* stores the currently 'selected' `Developer` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Developer>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change. This is similar for `Client` and `Project` objects.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
@@ -154,6 +154,158 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Edit features
+#### Implementation
+The original edit feature from AB-3 has been extended to account for the editing of projects and specific people - developers
+and clients. The edit command will be parsed to return 1 of 3 different commands, depending on the 
+object to be edited.
+
+The `AddressBookParser` will return the respective parser for the command depending on the user input in accordance to the
+respective command words defined in `CliSyntax`. Namely,
+* `edit-developer` will return an `EditDeveloperCommandParser` that parses the user input and creates an `EditDeveloperCommand`
+* `edit-client` will return an `EditClientCommandParser` that parses the user input and creates an `EditClientCommand`
+* `edit-project` will return an `EditProjectCommandParser` that parses the user input and creates an `EditProjectCommand`
+
+Each instance of `EditDeveloperCommand`, `EditClientCommand`, and `EditProjectCommand` objects have 2 private fields:
+1. an instance of `Index` containing the index of the target object to edit in the currently displayed list, and 
+2. an instance of `EditDeveloperDescriptor`, `EditClientDescriptor`, or `EditProjectDescriptor` respectively, which 
+contains the edited fields to update the target object with.
+
+Executing the command will replace the existing object in the current `model` with the new object with the edited fields.
+
+Other than extending the commands, parsers, and descriptors to account for `Developer`, `Client`, and `Project` separately,
+some changes to the sequence of interactions between the `Logic` and `Model` components were also made. When the
+`EditDeveloperCommandParser` and `EditClientCommandParser` parses edits to a `Project` assigned to a `Developer` or `Client`,
+it calls `Model##----` to check whether there is an existing `Project` with that name.
+
+**Example usage scenario**
+
+Given below is an example usage scenario where the user edits the projects assigned to a `Developer` using the `edit-developer`
+command.
+
+Step 1. ....
+
+#### Design considerations
+**Aspect: Command syntax**
+* Alternative 1 (current choice): Have separate commands for each `Developer`, `Client`, and `Project`. Executing the command
+automatically switches user to the respective tab.
+  * Pros: More specific and straightforward, allowed parameters in command are easier to navigate for users. More flexible
+    as do not need to be in respective tab to edit.
+  * Cons: More classes to create, user needs to type more.
+* Alternative 2: Have one general `edit` command. The edit will be made based on the current tab displayed.
+  * Pros: User as can be less specific when typing command.
+  * Cons: User needs to ensure that intended tab is open. Allowed parameters are less clearly defined, can lead to 
+  confusion and mistakes.
+
+### Add Developer Feature
+
+This feature allows users to add a developer to the bottom of the list of currently existing developers. Users are able to add any valid developer to the list. If a record of the same developer already exists in the list, the command will not be allowed and an error will be thrown to alert user.
+
+Example Use: `add-d n/John Doe p/98765432 e/johnd@example.com`
+
+#### Implementation
+
+Upon entry of the add developer command, an `AddDeveloperCommand` class is created. The `AddDeveloperCommand` class extends the abstract `Command` class and implements the `execute()` method. Upon execution of this method, a `Developer` object is added to the model’s list of developers if all the attributes provided are valid and a duplicate instance does not exist.
+
+Given below is an example usage scenario of how the add developer is executed step by step.
+
+Step 1. User launches the application
+
+Step 2. User inputs `add-d n/John Doe p/98765432 e/johnd@example.com` to save a developer.
+
+Step 3. The developer is added to the model’s list of developers if valid.
+
+The following sequence diagram illustrates how the add developer operation works:
+
+### Delete Developer Feature
+
+Deletes a developer at the specified **one-based index** of list of currently existing/found developers. Users are able to delete any developer in the list. If an index larger than or equal to the size of the developer’s list is provided, the command will not be allowed and an error will be thrown to alert user.
+
+Example Use: `del-d 1`
+
+#### Implementation
+
+Upon entry of the delete developer command, a `DeleteDeveloperCommand` class is created. The `DeleteDeveloperCommand` class extends the abstract `Command` class and implements the `execute()` method. Upon execution of this method, the doctor at specified **one-based index** is removed if the index provided is valid.
+
+Given below is an example usage scenario of how the delete developer command behaves at each step.
+
+Step 1. User launches the application
+
+Step 2. User executes `del-d 1` to delete the developer at index 1 (one-based indexing).
+
+Step 3. The developer at this index is removed if the index provided is valid.
+
+The following sequence diagram illustrates how the delete developer operation works:
+### \[Proposed\] Import feature
+This feature will allow project managers to import existing spreadsheets of developer and client data in the specified format in CSV
+#### Proposed Implementation
+
+There are 2 implementations: CLI and GUI
+
+##### CLI Implementation
+Upon entry of the import developer command, an `ImportDeveloperCommand` class is created. The `ImportDeveloperCommand` class extends the abstract `Command` class and implements the `execute()` method. Upon execution of this method, a list of `Developer` objects are added to the model’s list of developers if all the attributes provided are valid and a duplicate instance does not exist.
+
+Given below is an example usage scenario of how the import developer is executed step by step.
+
+Step 1. User launches the application
+
+Step 2. User inputs `import-developer developers.csv` to indicate path and filename of where the spreadsheet of developers is located.
+
+Step 3. The developers are added to the model’s list of developers if valid the column names are valid and each row of input is valid.
+
+The implementation follows likewise for clients.
+
+The following sequence diagram illustrates how the add developer operation works:
+
+##### GUI Implentation
+A new menu item will be added under File called `Import developers` and `Import clients`
+
+Clicking it will lead to a window to select the location of the respective file in csv format.
+
+The backend implementation of logic follows the CLI implementation by creating a `ImportDeveloperCommand` or `ImportClientCommand`
+
+### Find Feature
+
+#### Implementation
+
+The find feature is facilitated by a map-based strategy, associating specific prefixes (e.g., "find-developer n/" or "find-client r/") with corresponding predicates, allowing dynamic generation of filtering criteria based on user input.
+
+Implemented operations include:
+- `FindCommandParser#parse()`: Interprets the user's input and generates the appropriate predicate to filter the list of developers or clients.
+- `Model#updateFilteredPersonList()`: Updates the list displayed in the UI based on the provided predicate.
+
+Given below is an example usage scenario and how the find mechanism behaves at each step:
+
+**Step 1.** The user launches the application. The list of developers and clients are displayed.
+
+**Step 2.** To filter developers by name, the user executes the command `find-developer n/ alice bob`. The application recognizes the "developer n/" prefix and uses the `NameContainsKeywordsPredicate` to generate a filtering criteria. The list in the UI is updated to only display developers named Alice or Bob.
+
+**Step 3.** Next, the user wants to find clients from a specific organisation. They use the command `find-client o/ Google`. The "find-client o/" prefix maps to the `OrganisationContainsKeywordsPredicate` and filters clients associated with Google.
+
+**Step 4.** If the user provides an unrecognized prefix, e.g., `find-developer z/ alice`, an error message is displayed informing them of the correct command format.
+
+> :information_source: **Note:** While the user can search by multiple keywords, each keyword maps to an entire word in the attributes. For example, searching for "Ali" will not return "Alice".
+
+The following sequence diagram provides an overview of how the find operation is executed:
+
+[Diagram would be inserted here illustrating the parsing of the command, identification of the appropriate predicate, and subsequent filtering of the list.]
+
+### Design Considerations:
+
+**Aspect:** Implementation of the predicate map:
+
+**Alternative 1 (current choice):**
+- Use a long chain of `if-else` conditions for each attribute.
+    - **Pros:** Explicit parsing logic for each attribute.
+    - **Cons:** Code becomes lengthy and hard to maintain. Adding a new attribute involves modifying the parsing logic, increasing the risk of errors.
+
+**Alternative 2:**
+- Use a map linking prefixes to their corresponding predicate constructors.
+    - **Pros:** Simplifies the parsing process. Adding a new attribute to search becomes as simple as adding a new entry in the map.
+    - **Cons:** A potential mismatch between the prefix and its predicate can lead to wrong results.
+
+Given the benefits of a more maintainable and scalable codebase, we've decided to go with the first alternative. Future enhancements might include fuzzy search.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
@@ -172,11 +324,11 @@ Step 1. The user launches the application for the first time. The `VersionedAddr
 
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete 5` command to delete the 5th developer in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new developer. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
@@ -184,7 +336,7 @@ Step 3. The user executes `add n/David …​` to add a new person. The `add` co
 
 </div>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the developer was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 ![UndoRedoState3](images/UndoRedoState3.png)
 
@@ -229,7 +381,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+  * Pros: Will use less memory (e.g. for `delete`, just save the developer being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
@@ -238,7 +390,7 @@ _{more aspects and alternatives to be added}_
 
 _{Explain here how the data archiving feature will be implemented}_
 
-
+### \[Proposed\] ListDeveloperDeadlines Command
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -262,36 +414,31 @@ _{Explain here how the data archiving feature will be implemented}_
 * can type fast
 * prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
-* an employee or employer within a software company
+* a project manager or someone with similar needs working within a software company
 
-**Value proposition**: combines contact management with role-specific features, making it easy for employees 
-to manage company contacts faster than a typical mouse/GUI driven app
+**Value proposition**: CodeContact aims to seamlessly integrate contact, client, and project management, simplifying access to coding-related contacts, facilitating collaboration, and offering command-line efficiency for project managers.
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​         | I want to …​                                                        | So that I can…​                                                                                |
-|----------|-----------------|---------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| `* * *`  | new user        | see usage instructions                                              | refer to instructions when I forget how to use the App                                         |
-| `* * *`  | company boss    | set up a new company profile                                        | allow employees of my organisation to use the App                                              |
-| `* * *`  | company boss    | view all employee's contacts and details                            | quickly communicate with my employees                                                          |
-| `* * *`  | HR staff        | add new employee details quickly                                    | keep the employee directory up-to-date                                                         |
-| `* * *`  | HR staff        | add new employees details directly from a file                      | import employee details easily                                                                 |
-| `* * *`  | HR staff        | delete employee details                                             | keep the employee directory updated when an employee leaves                                    |
-| `* * *`  | HR staff        | view restricted salary information of employees                     | review and make changes to it if necessary                                                     |
-| `* * *`  | HR staff        | view all the information of all the employees in the company        | quickly communicate with them regarding HR matters                                             |
-| `* * *`  | HR staff        | edit any information of all the employees in the company            | keep the employee directory updated                                                            |
-| `* * *`  | any employee    | login as a specific user                                            | access user-specific features                                                                  |
-| `* * *`  | any employee    | view the contact details of other employees                         | get in touch with them if necessary                                                            |
-| `* * *`  | any employee    | search up other employees' contacts based on their details          | to locate their information easily                                                             |
-| `* * *`  | developer       | view the project-specific roles and Github accounts of my teammates | contact the relevant team member for project-related issues                                    |
-| `* * *`  | project manager | edit the project-specific roles of project collaborators under me   | allow project collaborators to get in touch with the relevant people regarding project matters |
-| `* *`    | company boss    | set up a company information page                                   | allow employees to view the company's mission, vision, and values                              |
-| `* *`    | company boss    | view project manage reports on resource allocation                  | ensure projects are running efficiently                                                        |
-| `* *`    | employee        | view my company's information page                                  | be aligned with the organisation's mission, vision, and values                                 |
-| `* *`    | project manager | view a list of project collaborators and their contact information  | access contact details easily and quickly assemble teams for new projects                      |
+| Priority | As a …​         | I want to …​                                                                                   | So that I can…​                                                           |
+|----------|-----------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| `* * *`  | project manager | add a list of Developers and their contact information                                         | access contact details easily and quickly assemble teams for new projects |
+| `* * *`  | project manager | add a list of Clients and their contact information                                            | access client details easily and know who is related to what project.     |
+| `* * *`  | project manager | add a list of Projects and their details                                                       | access project details easily and see who is related to the project       |
+| `* * *`  | project manager | delete information about a Client or Developer and the project details will update accordingly | don't repeat deleting several time                                        |
+| `* * *`  | project manager | edit the the details of the Developers added in                                                | constantly update the contact book                                        |
+| `* * *`  | project manager | edit the the details of the Clients added in                                                   | constantly update the contact book                                        |
+| `* * *`  | project manager | edit the the details of the Projects added in                                                  | constantly update any changes to the project                              |
+| `* * *`  | project manager | find the the Developers according to any details they have                                     | source for information related to developers easily                       |
+| `* * *`  | project manager | find the the Clients according to any details they have                                        | source for information related to clients easily                          |
+| `* * *`  | project manager | find the the Projects according to any details they have                                       | source for information related to projects easily                         |
+| `* * *`  | project manager | list different groups of people according to the different commands                            | view projects, clients and developers can be as different lists           |
+| `* * *`  | project manager | switch between tabs for Developers, Clients and Projects                                       | intuitively view the different data lists                                 |
+| `* *`    | project manager |                                                                                                |                                                                           |
+| `* *`    | project manager |                                                                                                |                                                                           |
 
 
 *{More to be added}*
@@ -477,17 +624,17 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
-### Deleting a person
+### Deleting a developer
 
-1. Deleting a person while all persons are being shown
+1. Deleting a developer while all developers are being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   1. Prerequisites: List all developers using the `list` command. Multiple developers in the list.
 
    1. Test case: `delete 1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
    1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No developer is deleted. Error details shown in the status message. Status bar remains the same.
 
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.

@@ -1,12 +1,12 @@
 package seedu.address.model.person;
 
 import java.util.List;
-import java.util.function.Predicate;
+
 import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Project} matches any of the keywords given.
+ * Tests that a {@code Developer}'s {@code Project} matches any of the keywords given.
  */
 public class ProjectContainsKeywordsPredicate implements KeywordPredicate<Person> {
     private final List<String> keywords;
@@ -17,7 +17,7 @@ public class ProjectContainsKeywordsPredicate implements KeywordPredicate<Person
 
     @Override
     public boolean test(Person person) {
-        // Assuming that the Person class has a getProject() method that returns a Project object
+        // Assuming that the Developer class has a getProject() method that returns a Project object
         // and that Project object has a method called asString() which returns the string representation of the project.
         return keywords.stream()
                 .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getProjects().toString(), keyword));

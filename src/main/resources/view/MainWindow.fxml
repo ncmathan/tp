@@ -3,31 +3,25 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Scene?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Stage?>
 
-<fx:root minHeight="600" minWidth="450" onCloseRequest="#handleExit" title="Address App" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="600" minWidth="450" onCloseRequest="#handleExit" title="CodeContact" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <icons>
-    <Image url="@/images/address_book_32.png" />
+    <Image url="@/images/logo.png" />
   </icons>
   <scene>
     <Scene>
-      <stylesheets>
-        <URL value="@DarkTheme.css" />
-        <URL value="@Extensions.css" />
-      </stylesheets>
 
       <VBox>
-        <MenuBar fx:id="menuBar" visible="false" VBox.vgrow="NEVER">
+        <MenuBar fx:id="menuBar" VBox.vgrow="NEVER">
           <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
           </Menu>
@@ -36,40 +30,51 @@
           </Menu>
         </MenuBar>
 
-        <StackPane fx:id="commandBoxPlaceholder" styleClass="pane-with-border" visible="false" VBox.vgrow="NEVER">
+        <StackPane fx:id="commandBoxPlaceholder" styleClass="pane-with-border" VBox.vgrow="NEVER">
           <padding>
             <Insets bottom="5" left="10" right="10" top="5" />
           </padding>
         </StackPane>
 
-        <StackPane fx:id="resultDisplayPlaceholder" maxHeight="100" minHeight="100" prefHeight="100" styleClass="pane-with-border" visible="false" VBox.vgrow="NEVER">
+                                <StackPane fx:id="resultDisplayPlaceholder" maxHeight="100" minHeight="100" prefHeight="100" styleClass="pane-with-border" VBox.vgrow="NEVER">
           <padding>
             <Insets bottom="5" left="10" right="10" top="5" />
           </padding>
         </StackPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <VBox layoutX="113.0" layoutY="19.0" prefHeight="181.0" prefWidth="113.0">
-                     <children>
-                        <Label text="Label" />
-                        <TextField />
-                        <Label text="Label" />
-                        <TextField prefHeight="0.0" prefWidth="113.0" />
-                        <Label text="Label" />
-                        <TextField prefHeight="0.0" prefWidth="113.0" />
-                     </children>
-                  </VBox>
-                  <ImageView fitHeight="85.0" fitWidth="150.0" layoutX="95.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </AnchorPane>
 
-        <VBox fx:id="personList" minWidth="340" prefWidth="340" styleClass="pane-with-border" visible="false" VBox.vgrow="ALWAYS">
+        <VBox fx:id="personList" minWidth="340" prefWidth="340" styleClass="pane-with-border" VBox.vgrow="ALWAYS">
           <padding>
             <Insets bottom="10" left="10" right="10" top="10" />
           </padding>
-          <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS" />
+               <children>
+                  <TabPane fx:id="tabPane" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab fx:id="developerTab" text="Developers">
+                           <content>
+                              <StackPane fx:id="developerListPanelPlaceholder" />
+                           </content>
+                        </Tab>
+                      <Tab fx:id="clientTab" text="Clients">
+                           <content>
+                              <StackPane fx:id="clientListPanelPlaceholder" />
+                           </content>
+                        </Tab>
+                        <Tab fx:id="projectTab" text="Projects">
+                           <content>
+                              <StackPane fx:id="projectListPanelPlaceholder" />
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
         </VBox>
+
+        <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
       </VBox>
+         <stylesheets>
+            <URL value="@Extensions.css" />
+            <URL value="@LightTheme.css" />
+         </stylesheets>
     </Scene>
   </scene>
 </fx:root>

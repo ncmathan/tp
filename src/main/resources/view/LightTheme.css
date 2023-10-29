@@ -1,0 +1,545 @@
+/* Light Theme for Contact Manager Application */
+
+/* General Styles */
+.background {
+    -fx-background-color: #ffffff;
+}
+
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #333333; /* Dark gray text color */
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #0078d4; /* Blue text color for bright labels */
+}
+
+/* Tab Styles */
+* {
+    -fx-primary-color: #dddddd; /* Your primary color */
+    -fx-secondary-color: #f3f3f3; /* Your secondary color */
+
+    -fx-focus-color: -fx-secondary-color;
+}
+
+.tab-header-area .tab-header-background {
+    -fx-background-color: -fx-primary-color;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: -fx-secondary-color;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: black; /* Change font color to black */
+    -fx-font-weight: bold;
+    -fx-padding: 0 5;
+}
+
+.tab-pane:top *.tab-header-area {
+    -fx-padding: 0 0; /* Updated padding for top tab pane */
+}
+
+.tab-pane {
+    -fx-background-color: transparent;
+    -fx-tab-min-width: 200px; /* Adjusted minimum tab width */
+    -fx-tab-min-height: 33px;
+    -fx-tab-max-height: 33px;
+}
+
+.tab-pane .tab {
+    -fx-background-color: transparent;
+}
+
+.tab-pane:focused .tab-header-area .headers-region .tab:selected .focus-indicator {
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-border-radius: 0;
+}
+
+/* TableView Styles */
+.table-view {
+    -fx-base: #ffffff;
+    -fx-control-inner-background: #ffffff;
+    -fx-background-color: #ffffff;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: #e2e2e2; /* Light gray border color for table headers */
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f3f3f3;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: #f3f3f3;
+    -fx-border-color: transparent transparent #e2e2e2 transparent; /* Light gray border color for table columns */
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #333333; /* Dark gray text color for column headers */
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: #0078d4; /* Blue background color for selected rows */
+}
+
+/* TabPane Styles */
+.tab-pane {
+    -fx-padding: 0 0 0 1;
+    -fx-background-color: #ffffff;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-background-color: #ffffff;
+}
+
+/* List Styles */
+.list-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-background-color: #f3f3f3; /* Light gray background color for lists */
+}
+
+.list-cell {
+    -fx-label-padding: 0 0 0 0;
+    -fx-graphic-text-gap: 0;
+    -fx-padding: 0 0 0 0;
+}
+
+.list-cell:filled:even {
+    -fx-background-color: #e3e3e3; /* Slightly darker background color for even list cells */
+}
+
+.list-cell:filled:odd {
+    -fx-background-color: #f3f3f3; /* Lighter background color for odd list cells */
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #0078d4; /* Blue background color for selected list cells */
+}
+
+.list-cell:filled:selected #cardPane {
+    -fx-border-color: #003d72; /* Dark blue border color for selected cells */
+    -fx-border-width: 1;
+}
+
+.list-cell .label {
+    -fx-text-fill: #333333; /* Dark gray text color for list labels */
+}
+
+.cell_big_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 16pt;
+    -fx-text-fill: #010504;
+}
+
+.cell_small_label {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13pt;
+    -fx-text-fill: #010504;
+}
+
+/* StackPane Styles */
+.stack-pane {
+    -fx-background-color: #ffffff;
+}
+
+/* Pane with Border Styles */
+.pane-with-border {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e2e2; /* Light gray border color */
+    -fx-border-top-width: 1px;
+}
+
+/* Status Bar Styles */
+.status-bar {
+    -fx-background-color: #f3f3f3; /* Light gray background color for the status bar */
+}
+
+.result-display {
+    -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 13pt;
+    -fx-text-fill: #333333; /* Dark gray text color for the result display */
+}
+
+.result-display .label {
+    -fx-text-fill: black !important;
+}
+
+.status-bar .label {
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #333333; /* Dark gray text color for status bar labels */
+    -fx-padding: 4px;
+    -fx-pref-height: 30px;
+}
+
+.status-bar-with-border {
+    -fx-background-color: #f3f3f3; /* Light gray background color for status bar with border */
+    -fx-border-color: #e2e2e2; /* Light gray border color */
+    -fx-border-width: 1px;
+}
+
+.status-bar-with-border .label {
+    -fx-text-fill: #333333; /* Dark gray text color for status bar with border labels */
+}
+
+/* Grid Pane Styles */
+.grid-pane {
+    -fx-background-color: #f3f3f3; /* Light gray background color for grid panes */
+    -fx-border-color: #e2e2e2; /* Light gray border color */
+    -fx-border-width: 1px;
+}
+
+.grid-pane .stack-pane {
+    -fx-background-color: #f3f3f3; /* Light gray background color for stack panes */
+}
+
+/* Context Menu Styles */
+.context-menu {
+    -fx-background-color: #ffffff;
+}
+
+.context-menu .label {
+    -fx-text-fill: #333333; /* Dark gray text color for context menu labels */
+}
+
+/* Menu Bar Styles */
+.menu-bar {
+    -fx-background-color: #ffffff;
+}
+
+.menu-bar .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #333333; /* Dark gray text color for menu bar labels */
+    -fx-opacity: 0.9;
+}
+
+/* Button Styles */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #e2e2e2; /* Light gray border color for buttons */
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #ffffff; /* White background for buttons */
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #333333; /* Dark gray text color for buttons */
+    -fx-background-insets: 0 0 0 0
+}
+/* StackPane Styles */
+.stack-pane {
+    -fx-background-color: #ffffff;
+}
+
+/* Pane with Border Styles */
+.pane-with-border {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e2e2; /* Light gray border color */
+    -fx-border-top-width: 1px;
+}
+
+/* Status Bar Styles */
+.status-bar {
+    -fx-background-color: #f3f3f3; /* Light gray background color for the status bar */
+}
+
+.result-display {
+    -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 13pt;
+    -fx-text-fill: #333333; /* Dark gray text color for the result display */
+}
+
+.result-display .label {
+    -fx-text-fill: black !important;
+}
+
+.status-bar .label {
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #333333; /* Dark gray text color for status bar labels */
+    -fx-padding: 4px;
+    -fx-pref-height: 30px;
+}
+
+/* Status Bar with Border Styles */
+.status-bar-with-border {
+    -fx-background-color: #f3f3f3; /* Light gray background color for status bar with border */
+    -fx-border-color: #e2e2e2; /* Light gray border color */
+    -fx-border-width: 1px;
+}
+
+.status-bar-with-border .label {
+    -fx-text-fill: #333333; /* Dark gray text color for status bar with border labels */
+}
+
+/* Grid Pane Styles */
+.grid-pane {
+    -fx-background-color: #f3f3f3; /* Light gray background color for grid panes */
+    -fx-border-color: #e2e2e2; /* Light gray border color */
+    -fx-border-width: 1px;
+}
+
+.grid-pane .stack-pane {
+    -fx-background-color: #f3f3f3; /* Light gray background color for stack panes */
+}
+
+/* Context Menu Styles */
+.context-menu {
+    -fx-background-color: #ffffff;
+}
+
+.context-menu .label {
+    -fx-text-fill: #333333; /* Dark gray text color for context menu labels */
+}
+
+/* Menu Bar Styles */
+.menu-bar {
+    -fx-background-color: #ffffff;
+}
+
+.menu-bar .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #333333; /* Dark gray text color for menu bar labels */
+    -fx-opacity: 0.9;
+}
+
+/* Button Styles */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #e2e2e2; /* Light gray border color for buttons */
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #ffffff; /* White background for buttons */
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #333333; /* Dark gray text color for buttons */
+    -fx-background-insets: 0 0 0 0;
+}
+
+.button:hover {
+    -fx-background-color: #f3f3f3; /* Light gray background color on hover */
+}
+
+.button:pressed, .button:default:hover:pressed {
+  -fx-background-color: #d3d3d3; /* Slightly darker background color when pressed */
+  -fx-text-fill: #0078d4; /* Blue text color when pressed */
+}
+
+.button:focused {
+    -fx-border-color: #333333, #333333; /* Dark gray border color on focus */
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #ffffff; /* White background for disabled buttons */
+    -fx-text-fill: #333333; /* Dark gray text color for disabled buttons */
+}
+
+.button:default {
+    -fx-background-color: #0078d4; /* Blue background color for default buttons */
+    -fx-text-fill: #ffffff; /* White text color for default buttons */
+}
+
+.button:default:hover {
+    -fx-background-color: #005ba2; /* Darker blue background color for default buttons on hover */
+}
+
+/* Dialog Pane Styles */
+.dialog-pane {
+    -fx-background-color: #ffffff;
+}
+
+.dialog-pane > *.button-bar > *.container {
+    -fx-background-color: #ffffff;
+}
+
+.dialog-pane > *.label.content {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333; /* Dark gray text color for dialog content */
+}
+
+.dialog-pane:header *.header-panel {
+    -fx-background-color: #f3f3f3; /* Light gray background for dialog header panel */
+}
+
+.dialog-pane:header *.header-panel *.label {
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-fill: #333333;
+    -fx-text-fill: #333333; /* Dark gray text color for dialog header labels */
+}
+
+/* Scroll Bar Styles */
+.scroll-bar {
+    -fx-background-color: #f3f3f3; /* Light gray background color for scroll bars */
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #d3d3d3; /* Slightly darker background color for the scroll thumb */
+    -fx-background-insets: 3;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+}
+
+.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 1 8 1 8;
+}
+
+.scroll-bar:horizontal .increment-arrow, .scroll-bar:horizontal .decrement-arrow {
+    -fx-padding: 8 1 8 1;
+}
+
+/* CardPane Styles */
+#cardPane {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+}
+
+/* Command Label Styles */
+#commandTypeLabel {
+    -fx-font-size: 11px;
+    -fx-text-fill: #F70D1A; /* Red text color for the command label */
+}
+
+/* Command TextField Styles */
+#commandTextField {
+    -fx-background-color: #ffffff #f3f3f3 #ffffff #f3f3f3;
+    -fx-background-insets: 0;
+    -fx-border-color: #f3f3f3 #f3f3f3 #333333 #f3f3f3;
+    -fx-border-insets: 0;
+    -fx-border-width: 1;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 13pt;
+    -fx-text-fill: #333333; /* Dark gray text color for the command text field */
+}
+
+/* Filter Field, Person List Panel, Person Webpage Styles */
+#filterField, #personListPanel, #personWebpage {
+    -fx-effect: innershadow(gaussian, black, 10, 0, 0, 0);
+}
+
+/* Result Display Styles */
+#resultDisplay .content {
+    -fx-background-color: transparent, #f3f3f3, transparent, #f3f3f3;
+    -fx-background-radius: 0;
+}
+
+/* Tags Styles */
+#tags {
+    -fx-hgap: 7;
+    -fx-vgap: 3;
+}
+
+#tags .label {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #0078d4; /* Blue background color for tags */
+    -fx-padding: 1 3 1 3;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 11;
+}
+/* Rating Styles */
+.rating > .container .button {
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-background-size: cover;
+    -fx-padding: 0;
+    -fx-border-style: none;
+}
+
+.rating:disabled {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-style: none;
+    -fx-opacity: 1.0; /* Full opacity */
+}
+
+/* TabPane Styles */
+.tab-pane {
+    -fx-padding: 0 0 0 1;
+    -fx-background-color: #ffffff;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-background-color: #ffffff;
+}
+
+/* TableView Styles */
+.table-view {
+    -fx-base: #ffffff;
+    -fx-control-inner-background: #ffffff;
+    -fx-background-color: #ffffff;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: #e2e2e2; /* Light gray border color for table headers */
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f3f3f3;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: #f3f3f3;
+    -fx-border-color: transparent transparent #e2e2e2 transparent; /* Light gray border color for table columns */
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #333333; /* Dark gray text color for column headers */
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: #0078d4; /* Blue background color for selected rows */
+}
+
+/* TableColumn Styles */
+.table-column .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #333333; /* Dark gray text color for table column labels */
+}
+/* VBox Styles */
+.vbox {
+    -fx-background-color: #ffffff;
+    -fx-spacing: 10; /* Adjust the vertical spacing between children */
+    -fx-padding: 20; /* Adjust the padding around the VBox */
+    -fx-border-color: #e2e2e2; /* Light gray border color */
+    -fx-border-width: 1px; /* Border width */
+}

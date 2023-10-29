@@ -4,7 +4,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.Person;
+import seedu.address.model.developer.Developer;
 
 import java.util.ArrayList;
 
@@ -16,36 +16,36 @@ public class ImportCommand extends Command{
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports employees from csv file.\n"
             + "Column titles should follow this format strictly:\n"
             + "Name, Contact Number, Email, Address, Date Joined, Role, Salary, Username, Password, Projects";
-    public static final String MESSAGE_SUCCESS = "New person added: %1$s";
+    public static final String MESSAGE_SUCCESS = "New developer added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = " already exists in the address book\n";
 
-    private final ArrayList<Person> toAddList;
+    private final ArrayList<Developer> toAddList;
 
     /**
-     * Creates an AddCommand to add the specified {@code Person}
+     * Creates an AddDeveloperCommand to add the specified {@code Developer}
      */
-    public ImportCommand(ArrayList<Person> personList) {
-        requireNonNull(personList);
-        for(Person i: personList) {
+    public ImportCommand(ArrayList<Developer> developerList) {
+        requireNonNull(developerList);
+        for(Developer i: developerList) {
             requireNonNull(i);
         }
-        toAddList = personList;
+        toAddList = developerList;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         String output = "";
-        for(Person toAdd: toAddList) {
-            if (model.hasPerson(toAdd)) {
+        for(Developer toAdd: toAddList) {
+            if (model.hasDeveloper(toAdd)) {
                 output += toAdd.getName().fullName + MESSAGE_DUPLICATE_PERSON;
             }
 
-            model.addPerson(toAdd);
+            model.addDeveloper(toAdd);
             output += String.format(MESSAGE_SUCCESS, Messages.format(toAdd));
             output += "\n";
         }
-        return new CommandResult(output);
+        return new CommandResult(output,TabIndex.Developer);
     }
 
     @Override

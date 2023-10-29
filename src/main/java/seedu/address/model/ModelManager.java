@@ -11,7 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.person.Person;
+import seedu.address.model.client.Client;
+import seedu.address.model.developer.Developer;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -21,7 +22,9 @@ public class ModelManager implements Model {
 
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
-    private final FilteredList<Person> filteredPersons;
+    private final FilteredList<Developer> filteredDevelopers;
+    private final FilteredList<Client> filteredClients;
+    private final FilteredList<seedu.address.model.project.Project> filteredProjects;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -33,7 +36,10 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        filteredDevelopers = new FilteredList<>(this.addressBook.getDeveloperList());
+        filteredClients = new FilteredList<>(this.addressBook.getClientList());
+        filteredProjects = new FilteredList<>(this.addressBook.getProjectList());
+
     }
 
     public ModelManager() {
@@ -88,44 +94,126 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasPerson(Person person) {
-        requireNonNull(person);
-        return addressBook.hasPerson(person);
+    public boolean hasDeveloper(Developer developer) {
+        requireNonNull(developer);
+        return addressBook.hasDeveloper(developer);
     }
 
     @Override
-    public void deletePerson(Person target) {
-        addressBook.removePerson(target);
+    public void deleteDeveloper(Developer target) {
+        addressBook.removeDeveloper(target);
     }
 
     @Override
-    public void addPerson(Person person) {
-        addressBook.addPerson(person);
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    public void addDeveloper(Developer developer) {
+        addressBook.addDeveloper(developer);
+        updateFilteredDeveloperList(PREDICATE_SHOW_ALL_DEVELOPERS);
     }
 
     @Override
-    public void setPerson(Person target, Person editedPerson) {
-        requireAllNonNull(target, editedPerson);
+    public void setDeveloper(Developer target, Developer editedDeveloper) {
+        requireAllNonNull(target, editedDeveloper);
 
-        addressBook.setPerson(target, editedPerson);
+        addressBook.setDeveloper(target, editedDeveloper);
     }
 
-    //=========== Filtered Person List Accessors =============================================================
+// Similarly, create methods for Client and Project
+
+//=========== Filtered Developer List Accessors =============================================================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * Returns an unmodifiable view of the list of {@code Developer} backed by the internal list of
      * {@code versionedAddressBook}
      */
     @Override
-    public ObservableList<Person> getFilteredPersonList() {
-        return filteredPersons;
+    public ObservableList<Developer> getFilteredDeveloperList() {
+        return filteredDevelopers;
     }
 
     @Override
-    public void updateFilteredPersonList(Predicate<Person> predicate) {
+    public void updateFilteredDeveloperList(Predicate<Developer> predicate) {
         requireNonNull(predicate);
-        filteredPersons.setPredicate(predicate);
+        filteredDevelopers.setPredicate(predicate);
+    }
+    @Override
+    public boolean hasClient(Client client) {
+        requireNonNull(client);
+        return addressBook.hasClient(client);
+    }
+
+    @Override
+    public void deleteClient(Client target) {
+        addressBook.removeClient(target);
+    }
+
+    @Override
+    public void addClient(Client client) {
+        addressBook.addClient(client);
+        updateFilteredClientList(PREDICATE_SHOW_ALL_CLIENTS);
+    }
+
+    @Override
+    public void setClient(Client target, Client editedClient) {
+        requireAllNonNull(target, editedClient);
+
+        addressBook.setClient(target, editedClient);
+    }
+
+//=========== Filtered Client List Accessors =============================================================
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Client} backed by the internal list of
+     * {@code versionedAddressBook}
+     */
+    @Override
+    public ObservableList<Client> getFilteredClientList() {
+        return filteredClients;
+    }
+
+    @Override
+    public void updateFilteredClientList(Predicate<Client> predicate) {
+        requireNonNull(predicate);
+        filteredClients.setPredicate(predicate);
+    }
+    @Override
+    public boolean hasProject(seedu.address.model.project.Project project) {
+        requireNonNull(project);
+        return addressBook.hasProject(project);
+    }
+
+    @Override
+    public void deleteProject(seedu.address.model.project.Project target) {
+        addressBook.removeProject(target);
+    }
+
+    @Override
+    public void addProject(seedu.address.model.project.Project project) {
+        addressBook.addProject(project);
+        updateFilteredProjectList(PREDICATE_SHOW_ALL_PROJECTS);
+    }
+
+    @Override
+    public void setProject(seedu.address.model.project.Project target, seedu.address.model.project.Project editedProject) {
+        requireAllNonNull(target, editedProject);
+
+        addressBook.setProject(target, editedProject);
+    }
+
+//=========== Filtered Project List Accessors =============================================================
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Project} backed by the internal list of
+     * {@code versionedAddressBook}
+     */
+    @Override
+    public ObservableList<seedu.address.model.project.Project> getFilteredProjectList() {
+        return filteredProjects;
+    }
+
+    @Override
+    public void updateFilteredProjectList(Predicate<seedu.address.model.project.Project> predicate) {
+        requireNonNull(predicate);
+        filteredProjects.setPredicate(predicate);
     }
 
     @Override
@@ -142,7 +230,9 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+                && filteredDevelopers.equals(otherModelManager.filteredDevelopers)
+                && filteredClients.equals(otherModelManager.filteredClients)
+                && filteredProjects.equals(otherModelManager.filteredProjects);
     }
 
 }

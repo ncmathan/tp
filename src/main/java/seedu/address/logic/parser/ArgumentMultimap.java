@@ -75,4 +75,11 @@ public class ArgumentMultimap {
             throw new ParseException(Messages.getErrorMessageForDuplicatePrefixes(duplicatedPrefixes));
         }
     }
+
+    /**
+     * Returns a boolean representing whether there are any prefix mappings in the ArgumentMultimap.
+     */
+    public boolean hasMappings() {
+        return !argMultimap.isEmpty();
+    }
 }

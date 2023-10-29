@@ -8,33 +8,32 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Set;
 
-import seedu.address.logic.commands.AddCommand;
-import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
-import seedu.address.model.person.Person;
-import seedu.address.model.tag.Tag;
+import seedu.address.logic.commands.add.AddDeveloperCommand;
+import seedu.address.model.person.Developer;
+import seedu.address.model.project.Tag;
 
 /**
- * A utility class for Person.
+ * A utility class for Developer.
  */
 public class PersonUtil {
 
     /**
-     * Returns an add command string for adding the {@code person}.
+     * Returns an add command string for adding the {@code developer}.
      */
-    public static String getAddCommand(Person person) {
-        return AddCommand.COMMAND_WORD + " " + getPersonDetails(person);
+    public static String getAddCommand(Developer developer) {
+        return AddDeveloperCommand.COMMAND_WORD + " " + getPersonDetails(developer);
     }
 
     /**
-     * Returns the part of command string for the given {@code person}'s details.
+     * Returns the part of command string for the given {@code developer}'s details.
      */
-    public static String getPersonDetails(Person person) {
+    public static String getPersonDetails(Developer developer) {
         StringBuilder sb = new StringBuilder();
-        sb.append(PREFIX_NAME + person.getName().fullName + " ");
-        sb.append(PREFIX_PHONE + person.getPhone().value + " ");
-        sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
-        sb.append(PREFIX_ADDRESS + person.getAddress().value + " ");
-        person.getTags().stream().forEach(
+        sb.append(PREFIX_NAME + developer.getName().fullName + " ");
+        sb.append(PREFIX_PHONE + developer.getPhone().value + " ");
+        sb.append(PREFIX_EMAIL + developer.getEmail().value + " ");
+        sb.append(PREFIX_ADDRESS + developer.getAddress().value + " ");
+        developer.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagName + " ")
         );
         return sb.toString();

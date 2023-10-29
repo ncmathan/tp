@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
- * Represents a Person's role in the company.
+ * Represents a Developer's role in the company.
  * Guarantees: immutable; is valid as declared in {@link #isValidRole(String)}
  */
 public class Role {
@@ -35,7 +35,8 @@ public class Role {
      * Returns true if a given string is a valid role.
      */
     public static boolean isValidRole(String test) {
-        return Arrays.asList(roles).contains(test);
+        return true;
+        //return Arrays.asList(roles).contains(test);
     }
 
 

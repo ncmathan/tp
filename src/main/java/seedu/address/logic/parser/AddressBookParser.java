@@ -1,19 +1,42 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_ACTION_BY_USER;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 
-import java.util.Arrays;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.logic.commands.*;
+import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.DeleteDeveloperCommand;
+import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.FindClientCommand;
+import seedu.address.logic.commands.FindDeveloperCommand;
+import seedu.address.logic.commands.FindProjectCommand;
+import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.ImportCommand;
+import seedu.address.logic.commands.ListClientCommand;
+import seedu.address.logic.commands.ListDeveloperCommand;
+import seedu.address.logic.commands.ListProjectCommand;
+import seedu.address.logic.commands.add.AddClientCommand;
+import seedu.address.logic.commands.add.AddDeveloperCommand;
+import seedu.address.logic.commands.add.AddProjectCommand;
+import seedu.address.logic.commands.edit.EditClientCommand;
+import seedu.address.logic.commands.edit.EditDeveloperCommand;
+import seedu.address.logic.commands.edit.EditProjectCommand;
+import seedu.address.logic.commands.imports.ImportDeveloperCommand;
+import seedu.address.logic.commands.imports.ImportClientCommand;
+import seedu.address.logic.parser.add.AddClientCommandParser;
+import seedu.address.logic.parser.add.AddDeveloperCommandParser;
+import seedu.address.logic.parser.add.AddProjectCommandParser;
+import seedu.address.logic.parser.edit.EditClientCommandParser;
+import seedu.address.logic.parser.edit.EditDeveloperCommandParser;
+import seedu.address.logic.parser.edit.EditProjectCommandParser;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Person;
-import seedu.address.model.person.Role;
+import seedu.address.logic.parser.imports.ImportClientCommandParser;
+import seedu.address.logic.parser.imports.ImportDeveloperCommandParser;
 
 /**
  * Parses user input.
@@ -26,7 +49,6 @@ public class AddressBookParser {
     private static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
     private static final Logger logger = LogsCenter.getLogger(AddressBookParser.class);
 
-    private static Role role = new Role("HR");
     /**
      * Parses user input into command for execution.
      *
@@ -50,38 +72,50 @@ public class AddressBookParser {
 
         switch (commandWord) {
 
+        case AddDeveloperCommand.COMMAND_WORD:
+            return new AddDeveloperCommandParser().parse(arguments);
+        case AddClientCommand.COMMAND_WORD:
+            return new AddClientCommandParser().parse(arguments);
+        case AddProjectCommand.COMMAND_WORD:
+            return new AddProjectCommandParser().parse(arguments);
+        case ImportDeveloperCommand.COMMAND_WORD:
+            return new ImportDeveloperCommandParser().parse(arguments);
+        case ImportClientCommand.COMMAND_WORD:
+            return new ImportClientCommandParser().parse(arguments);
 
-        case AddCommand.COMMAND_WORD:
-            if (AddressBookParser.role.equals(new Role("HR"))) {
-                return new AddCommandParser().parse(arguments);
-            } else {
-                throw new ParseException(MESSAGE_INVALID_ACTION_BY_USER);
-            }
         case ImportCommand.COMMAND_WORD:
-            if (AddressBookParser.role.equals(new Role("HR"))) {
-                return new ImportCommandParser().parse(arguments);
-            } else {
-                throw new ParseException(MESSAGE_INVALID_ACTION_BY_USER);
-            }
+            return new ImportDeveloperCommandParser().parse(arguments);
 
-        case EditCommand.COMMAND_WORD:
-            return new EditCommandParser().parse(arguments);
-
-        case DeleteCommand.COMMAND_WORD:
-            if (AddressBookParser.role.equals(new Role("HR"))) {
-                return new DeleteCommandParser().parse(arguments);
-            } else {
-                throw new ParseException(MESSAGE_INVALID_ACTION_BY_USER);
-            }
+        case EditDeveloperCommand.COMMAND_WORD:
+            return new EditDeveloperCommandParser().parse(arguments);
+        case EditClientCommand.COMMAND_WORD:
+            return new EditClientCommandParser().parse(arguments);
+        case EditProjectCommand.COMMAND_WORD:
+            return new EditProjectCommandParser().parse(arguments);
+            
+        case DeleteDeveloperCommand.COMMAND_WORD:
+            return new DeleteDeveloperCommandParser().parse(arguments);
 
         case ClearCommand.COMMAND_WORD:
             return new ClearCommand();
 
-        case FindCommand.COMMAND_WORD:
-            return new FindCommandParser().parse(arguments);
+        case FindDeveloperCommand.COMMAND_WORD:
+            return new FindDeveloperCommandParser().parse(arguments);
 
-        case ListCommand.COMMAND_WORD:
-            return new ListCommand();
+        case FindClientCommand.COMMAND_WORD:
+            return new FindClientCommandParser().parse(arguments);
+
+        case FindProjectCommand.COMMAND_WORD:
+            return new FindProjectCommandParser().parse(arguments);
+            
+        case ListClientCommand.COMMAND_WORD:
+            return new ListClientCommand();
+
+        case ListDeveloperCommand.COMMAND_WORD:
+            return new ListDeveloperCommand();
+
+        case ListProjectCommand.COMMAND_WORD:
+            return new ListProjectCommand();
 
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
@@ -94,15 +128,4 @@ public class AddressBookParser {
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
     }
-
-    /**
-     * Sets the current user in the Address Book application based on the provided Person object.
-     *
-     * @param user The Person object representing the current user.
-     *             This person's role will be used to set the user's role in the application.
-     */
-    public static void setCurrentUser(Person user) {
-        AddressBookParser.role = user.getRole();
-    }
-
 }

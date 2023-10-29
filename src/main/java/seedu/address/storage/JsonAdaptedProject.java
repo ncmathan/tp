@@ -1,37 +1,57 @@
 package seedu.address.storage;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.tag.Project;
+import seedu.address.model.commons.Name;
+import seedu.address.model.project.Deadline;
+import seedu.address.model.project.Description;
+import seedu.address.model.project.Project;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Jackson-friendly version of {@link Project}.
  */
 class JsonAdaptedProject {
+    public static final String MISSING_FIELD_MESSAGE_FORMAT = "Project's %s field is missing!";
 
     private final String projectName;
+    private final String description;
+    private final List<String> deadlines = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedProject} with the given {@code projectName}.
      */
     @JsonCreator
-    public JsonAdaptedProject(String projectName) {
+    public JsonAdaptedProject(@JsonProperty("projectName") String projectName, @JsonProperty("description") String description,
+                              @JsonProperty("deadlines") List<String> deadlines) {
+
         this.projectName = projectName;
+        this.description = description;
+        this.deadlines.clear();
+        if (deadlines != null) {
+            this.deadlines.addAll(deadlines);
+        }
     }
 
     /**
      * Converts a given {@code Tag} into this class for Jackson use.
      */
     public JsonAdaptedProject(Project source) {
-        projectName = source.projectName;
+
+        projectName = source.getProjectName().fullName;
+        description = source.getProjectDescription().desc;
+        deadlines.addAll(source.getProjectDeadlines().stream()
+                .map(Deadline::getStringRepresentation).collect(Collectors.toList()));
     }
 
-    @JsonValue
-    public String getTagName() {
-        return projectName;
-    }
 
     /**
      * Converts this Jackson-friendly adapted tag object into the model's {@code Tag} object.
@@ -39,10 +59,36 @@ class JsonAdaptedProject {
      * @throws IllegalValueException if there were any data constraints violated in the adapted tag.
      */
     public Project toModelType() throws IllegalValueException {
-        if (!Project.isValidProjectName(projectName)) {
-            throw new IllegalValueException(Project.MESSAGE_CONSTRAINTS);
+        if (projectName == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
         }
-        return new Project(projectName);
+        if (!Name.isValidName(projectName)) {
+            throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+        }
+        final Name modelName = new Name(projectName);
+
+        if (description == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Description.class.getSimpleName()));
+        }
+        if (!Description.isValidDescription(description)) {
+            throw new IllegalValueException(Description.MESSAGE_CONSTRAINTS);
+        }
+        final Description modelDescription = new Description(description);
+
+        if (deadlines == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Deadline.class.getSimpleName()));
+        }
+
+        // Parse and validate the set of deadlines
+        final Set<Deadline> modelDeadlines = new HashSet<>();
+        for (String deadline : deadlines) {
+            if (!Deadline.isValidDeadline(deadline)) {
+                throw new IllegalValueException(Deadline.MESSAGE_CONSTRAINTS);
+            }
+            modelDeadlines.add(new Deadline(deadline));
+        }
+
+        return new Project(modelName, modelDescription, modelDeadlines);
     }
 
 }
